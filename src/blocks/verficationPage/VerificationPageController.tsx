@@ -12,6 +12,8 @@ interface IState {
   fourthDigit: string;
   fifthDigit: string;
   allBorder: string;
+  count: number;
+  resendOtp: string;
 }
 export class VerificationPageController extends Component<IProps, IState> {
   state = {
@@ -22,10 +24,34 @@ export class VerificationPageController extends Component<IProps, IState> {
     fourthDigit: '',
     fifthDigit: '',
     allBorder: '',
+    count: 30,
+    resendOtp: '',
   };
   componentDidMount(): void {
     this.getRandomOtp();
   }
+  updateRandomOtp = () => {
+    try {
+      AsyncStorage.setItem('randomOtp', JSON.stringify(this.state.randomOtp));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  resendTime = () => {
+    let intervalId = setInterval(() => {
+      if (this.state.count === 0) {
+        clearInterval(intervalId);
+        this.setState({
+          randomOtp: Math.ceil(Math.random() * 100000).toString(),
+        }),
+          () => {
+            this.updateRandomOtp();
+          };
+      } else {
+        this.setState({count: this.state.count - 1});
+      }
+    }, 2000);
+  };
   getRandomOtp = async () => {
     try {
       const randomOtp = await AsyncStorage.getItem('randomOtp');

@@ -30,7 +30,7 @@ export class VerificationPage extends VerificationPageController {
   }
   RBSheet: any;
   render() {
-    console.log(this.state.randomOtp, 'otp loaded');
+    console.log(this.state.randomOtp, this.state.count, 'otp loaded');
     return (
       <SafeAreaView>
         <View style={styles.verificationContainer}>
@@ -272,6 +272,7 @@ export class VerificationPage extends VerificationPageController {
               }}>
               Don't recieve the code?{' '}
               <Text
+                onPress={() => this.resendTime()}
                 style={{color: BlueVoilet, fontSize: 14, fontWeight: '600'}}>
                 Resend
               </Text>
